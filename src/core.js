@@ -92,12 +92,13 @@ $.extend($.fn, {
 	valid: function() {
 		var valid, validator, errorList;
 
-		if ( $( this[ 0 ] ).is( "form" ) ) {
+		if ( $( this[ 0 ] ).is( "form" ) || $( this[ 0 ] ).hasClass('fn_validate')) {
 			valid = this.validate().form();
 		} else {
 			errorList = [];
 			valid = true;
-			validator = $( this[ 0 ].form ).validate();
+			validator = $.data( this.closest('.fn_validate').length ? this.closest('.fn_validate')[0] : this[ 0 ].form, "validator" )
+			//validator = $( this[ 0 ].form ).validate();
 			this.each( function() {
 				valid = validator.element( this ) && valid;
 				errorList = errorList.concat( validator.errorList );
@@ -122,6 +123,7 @@ $.extend($.fn, {
 			settings, staticRules, existingRules, data, param, filtered;
 
 		if ( command ) {
+			console.log('@todo fix me');
 			settings = $.data( element.form, "validator" ).settings;
 			staticRules = settings.rules;
 			existingRules = $.validator.staticRules( element );
@@ -365,7 +367,7 @@ $.extend( $.validator, {
 			});
 
 			function delegate( event ) {
-				var validator = $.data( this[ 0 ].form, "validator" ),
+				var validator = $.data( this.closest('.fn_validate').length ? this.closest('.fn_validate')[0] : this[ 0 ].form, "validator" ),
 					eventType = "on" + event.type.replace( /^validate/, "" ),
 					settings = validator.settings;
 				if ( settings[ eventType ] && !this.is( settings.ignore ) ) {
@@ -895,6 +897,7 @@ $.extend( $.validator, {
 				return param;
 			},
 			"string": function( param, element ) {
+				console.log('@todo fix me');
 				return !!$( param, element.form ).length;
 			},
 			"function": function( param, element ) {
@@ -940,16 +943,30 @@ $.extend( $.validator, {
 
 	},
 
+	//classRuleSettings: {
+	//	required: { required: true },
+	//	email: { email: true },
+	//	url: { url: true },
+	//	date: { date: true },
+	//	dateISO: { dateISO: true },
+	//	number: { number: true },
+	//	digits: { digits: true },
+	//	creditcard: { creditcard: true }
+	//},
+
+	// MODIFIED BY DELOITTE DIGITAL - added v_ to namespace the validation classes
 	classRuleSettings: {
-		required: { required: true },
-		email: { email: true },
-		url: { url: true },
-		date: { date: true },
-		dateISO: { dateISO: true },
-		number: { number: true },
-		digits: { digits: true },
-		creditcard: { creditcard: true }
+		v_required: { required: true },
+		v_email: { email: true },
+		v_url: { url: true },
+		v_maxlength: { maxlength:true },
+		v_date: { date: true },
+		v_dateISO: { dateISO: true },
+		v_number: { number: true },
+		v_digits: { digits: true },
+		v_creditcard: { creditcard: true }
 	},
+	// END MODIFIED
 
 	addClassRules: function( className, rules ) {
 		if ( className.constructor === String ) {
@@ -1032,7 +1049,15 @@ $.extend( $.validator, {
 
 	staticRules: function( element ) {
 		var rules = {},
-			validator = $.data( element.form, "validator" );
+			validator = $.data( $(element).closest('.fn_validate').length ? $(element).closest('.fn_validate')[0] : element.form, "validator");
+
+		//if ($(element).closest('.fn_validate').length) {
+		//	form = $(element).closest('.fn_validate')[0];
+		//} else {
+		//	form = element.form;
+		//}
+        //
+		//validator = $.data( form, "validator" );
 
 		if ( validator.settings.rules ) {
 			rules = $.validator.normalizeRule( validator.settings.rules[ element.name ] ) || {};
@@ -1052,6 +1077,7 @@ $.extend( $.validator, {
 				var keepRule = true;
 				switch ( typeof val.depends ) {
 				case "string":
+					console.log('@todo fix me');
 					keepRule = !!$( val.depends, element.form ).length;
 					break;
 				case "function":

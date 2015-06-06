@@ -92,12 +92,12 @@ $.extend($.fn, {
 	valid: function() {
 		var valid, validator, errorList;
 
-		if ( $( this[ 0 ] ).is( "form" ) || $( this[ 0 ] ).hasClass("fn_validate")) {
+		if ( $( this[ 0 ] ).is( "form" ) || $( this[ 0 ] ).hasClass( "fn_validate" )) {
 			valid = this.validate().form();
 		} else {
 			errorList = [];
 			valid = true;
-			validator = $.data( this.closest(".fn_validate").length ? this.closest(".fn_validate")[0] : this[ 0 ].form, "validator" );
+			validator = $( this.closest( ".fn_validate" ).length ? this.closest( ".fn_validate" )[ 0 ] : this[ 0 ].form ).validate();
 			this.each( function() {
 				valid = validator.element( this ) && valid;
 				errorList = errorList.concat( validator.errorList );

@@ -98,7 +98,6 @@ $.extend($.fn, {
 			errorList = [];
 			valid = true;
 			validator = $.data( this.closest(".fn_validate").length ? this.closest(".fn_validate")[0] : this[ 0 ].form, "validator" );
-			//validator = $( this[ 0 ].form ).validate();
 			this.each( function() {
 				valid = validator.element( this ) && valid;
 				errorList = errorList.concat( validator.errorList );
@@ -123,8 +122,7 @@ $.extend($.fn, {
 			settings, staticRules, existingRules, data, param, filtered;
 
 		if ( command ) {
-			console.log("@todo fix me");
-			settings = $.data( element.form, "validator" ).settings;
+			settings = $.data( $(element).closest( ".fn_validate" ).length ? $(element).closest( ".fn_validate" )[ 0 ] : element.form, "validator" ).settings;
 			staticRules = settings.rules;
 			existingRules = $.validator.staticRules( element );
 			switch ( command ) {
@@ -367,7 +365,7 @@ $.extend( $.validator, {
 			});
 
 			function delegate( event ) {
-				var validator = $.data( this.closest(".fn_validate").length ? this.closest(".fn_validate")[0] : this[ 0 ].form, "validator" ),
+				var validator = $.data( this.closest( ".fn_validate" ).length ? this.closest( ".fn_validate" )[0] : this[ 0 ].form, "validator" ),
 					eventType = "on" + event.type.replace( /^validate/, "" ),
 					settings = validator.settings;
 				if ( settings[ eventType ] && !this.is( settings.ignore ) ) {
@@ -1049,7 +1047,7 @@ $.extend( $.validator, {
 
 	staticRules: function( element ) {
 		var rules = {},
-			validator = $.data( $(element).closest(".fn_validate").length ? $(element).closest(".fn_validate")[0] : element.form, "validator");
+			validator = $.data( $(element).closest( ".fn_validate" ).length ? $(element).closest( ".fn_validate" )[0] : element.form, "validator");
 
 		//if ($(element).closest('.fn_validate').length) {
 		//	form = $(element).closest('.fn_validate')[0];
@@ -1077,8 +1075,7 @@ $.extend( $.validator, {
 				var keepRule = true;
 				switch ( typeof val.depends ) {
 				case "string":
-					console.log("@todo fix me");
-					keepRule = !!$( val.depends, element.form ).length;
+					keepRule = !!$( val.depends, $(element).closest( ".fn_validate" ).length ? $(element).closest( ".fn_validate" )[0] : element.form ).length;
 					break;
 				case "function":
 					keepRule = val.depends.call( element, element );

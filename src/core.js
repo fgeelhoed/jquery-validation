@@ -941,30 +941,16 @@ $.extend( $.validator, {
 
 	},
 
-	//classRuleSettings: {
-	//	required: { required: true },
-	//	email: { email: true },
-	//	url: { url: true },
-	//	date: { date: true },
-	//	dateISO: { dateISO: true },
-	//	number: { number: true },
-	//	digits: { digits: true },
-	//	creditcard: { creditcard: true }
-	//},
-
-	// MODIFIED BY DELOITTE DIGITAL - added v_ to namespace the validation classes
 	classRuleSettings: {
-		v_required: { required: true },
-		v_email: { email: true },
-		v_url: { url: true },
-		v_maxlength: { maxlength:true },
-		v_date: { date: true },
-		v_dateISO: { dateISO: true },
-		v_number: { number: true },
-		v_digits: { digits: true },
-		v_creditcard: { creditcard: true }
+		required: { required: true },
+		email: { email: true },
+		url: { url: true },
+		date: { date: true },
+		dateISO: { dateISO: true },
+		number: { number: true },
+		digits: { digits: true },
+		creditcard: { creditcard: true }
 	},
-	// END MODIFIED
 
 	addClassRules: function( className, rules ) {
 		if ( className.constructor === String ) {
